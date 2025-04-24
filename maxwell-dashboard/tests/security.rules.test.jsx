@@ -1,4 +1,4 @@
-// tests/security.rules.test.js
+// tests/security.rules.test.jsx
 
 const fs = require('fs');
 const path = require('path');
