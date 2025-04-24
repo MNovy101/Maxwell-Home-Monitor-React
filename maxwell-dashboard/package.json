@@ -3,16 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "serve": "vite preview",
-  "test": "vitest",
-  "test:rtdb": "vitest --config vitest.config.js"
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "vitest",
+    "test:rtdb": "vitest --config vitest.config.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.7.0",
     "firebase": "^11.6.0",
+    "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0"
@@ -32,6 +33,7 @@
     "globals": "^16.0.0",
     "jsdom": "^26.1.0",
     "vite": "^6.3.1",
+    "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.1.2"
   }
 }
