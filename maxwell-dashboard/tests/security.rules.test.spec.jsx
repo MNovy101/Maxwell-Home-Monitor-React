@@ -2,19 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const {
-  initializeTestEnvironment,
-  assertSucceeds,
-  assertFails
-} = require('@firebase/rules-unit-testing');
-
+const { initializeTestEnvironment, assertSucceeds, assertFails } =
+  require('@firebase/rules-unit-testing');
 const PROJECT_ID = 'maxwell-test-project';
-const RULES_PATH = path.resolve(__dirname, '../database.rules.json');
+const RULES_PATH = 'database.rules.json';
 
 let testEnv;
 
 beforeAll(async () => {
-  // Initialize the emulator with your project's rules
   testEnv = await initializeTestEnvironment({
     projectId: PROJECT_ID,
     database: {
@@ -26,8 +21,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Cleanup emulator
-  await testEnv.cleanup();
+  if (testEnv) {
+    await testEnv.cleanup();
+  }
 });
 
 describe('Realtime Database security rules', () => {
