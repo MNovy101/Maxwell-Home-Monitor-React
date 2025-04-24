@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBL9TMABrAFQDSf8kVA79DzjcT8HcmhXBc",
+    apiKey: "Please Request!!",
     authDomain: "maxwell-home-power-monitor.firebaseapp.com",
     databaseURL: "https://maxwell-home-power-monitor-default-rtdb.firebaseio.com",
     projectId: "maxwell-home-power-monitor",
