@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "test": "vitest"
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "serve": "vite preview",
+  "test": "vitest",
+  "test:rtdb": "vitest --config vitest.config.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.7.0",
