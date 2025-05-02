@@ -3,10 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './KpiCard.module.css';
 
-export default function KpiCard({ title, value, unit, icon }) {
+export default function KpiCard({ title, value, unit, Icon }) {
   return (
     <div className={styles.card}>
-      {icon && <div className={styles.icon}>{icon}</div>}
+        {Icon && (
+          <div className={styles.icon}>
+           <Icon className={styles.svgIcon} />
+         </div>
+       )}
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.value}>
@@ -21,10 +25,10 @@ KpiCard.propTypes = {
   title: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   unit: PropTypes.string,
-  icon: PropTypes.node,
+  Icon: PropTypes.elementType,
 };
 
 KpiCard.defaultProps = {
   unit: '',
-  icon: null,
+  icon: null, 
 };
