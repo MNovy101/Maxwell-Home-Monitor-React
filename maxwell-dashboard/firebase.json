@@ -1,8 +1,7 @@
 {
     "emulators": {
       "database": {
-        "port": 9000,
-        "host": "localhost"
+        "rules": "database.rules.json"
       },
       "ui": {
         "enabled": true,
@@ -10,4 +9,3 @@
       }
     }
   }
-  

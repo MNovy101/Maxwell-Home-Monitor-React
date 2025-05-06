@@ -1,11 +1,33 @@
 {
-    "rules": {
-      "users": {
-        "$uid": {
-          ".read": "$uid === auth.uid",
-          ".write": "$uid === auth.uid"
+  "rules": {
+    "energy_data": {
+      ".read":  "auth != null",
+      ".write": "auth != null",
+      "$timestamp": {
+        ".validate": "newData.hasChildren(['voltage','current','power'])",
+        "voltage": {
+          ".validate": "newData.isNumber()"
+        },
+        "current": {
+          ".validate": "newData.isNumber()"
+        },
+        "power": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    },
+    "alerts": {
+      ".read":  "auth != null",
+      ".write": "auth != null",
+      "$alert_id": {
+        ".validate": "newData.hasChildren(['state','timestamp'])",
+        "state": {
+          ".validate": "newData.isString() && (newData.val() == 'triggered' || newData.val() == 'cleared')"
+        },
+        "timestamp": {
+          ".validate": "newData.isNumber()"
         }
       }
     }
   }
-  
+}

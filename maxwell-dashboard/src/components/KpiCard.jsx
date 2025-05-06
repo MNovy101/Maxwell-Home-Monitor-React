@@ -7,7 +7,7 @@ export default function KpiCard({ title, value, unit, Icon }) {
   return (
     <div className={styles.card}>
         {Icon && (
-          <div className={styles.icon}>
+          <div className={styles.Icon}>
            <Icon className={styles.svgIcon} />
          </div>
        )}
@@ -30,5 +30,5 @@ KpiCard.propTypes = {
 
 KpiCard.defaultProps = {
   unit: '',
-  icon: null, 
+  Icon: null, 
 };

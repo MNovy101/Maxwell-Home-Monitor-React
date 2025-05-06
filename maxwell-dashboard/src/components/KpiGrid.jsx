@@ -1,29 +1,32 @@
 // src/components/KpiGrid.jsx
 import React from 'react';
 import KpiCard from './KpiCard';
-import PowerIcon from '../assets/icons/power.svg?react';
-import VoltageIcon from '../assets/icons/voltage.svg?react';
-import CurrentIcon from '../assets/icons/current.svg?react';
+import useRealtimeMetrics from '../hooks/useRealtimeMetrics';
+import PowerIcon from '../assets/icons/power.svg';
+import VoltageIcon from '../assets/icons/voltage.svg';
+import CurrentIcon from '../assets/icons/current.svg';
 import styles from './KpiGrid.module.css';
 
-export default function KpiGrid({ metrics }) {
+export default function Dashboard() {
+  const { power, voltage, current } = useRealtimeMetrics();
+
   return (
     <div className={styles.grid}>
       <KpiCard
         title="Power"
-        value={metrics.power.toFixed(1)}
+        value={power.toFixed(2)}
         unit="W"
         icon={<PowerIcon />}
       />
       <KpiCard
         title="Voltage"
-        value={metrics.voltage.toFixed(1)}
+        value={voltage.toFixed(2)}
         unit="V"
         icon={<VoltageIcon />}
       />
       <KpiCard
         title="Current"
-        value={metrics.current.toFixed(2)}
+        value={current.toFixed(2)}
         unit="A"
         icon={<CurrentIcon />}
       />
