@@ -1,40 +1,46 @@
-// src/hooks/useRealtimeMetrics.jsx
+// src/hooks/useRealtimeMetrics.js
 import { useState, useEffect } from 'react';
 import { database } from '../firebase';
-import { ref, onValue } from 'firebase/database';
+import {
+  ref,
+  query,
+  orderByChild,
+  limitToLast,
+  onValue
+} from 'firebase/database';
 
 export default function useRealtimeMetrics() {
-  const [metrics, setMetrics] = useState({ power: 0, voltage: 0, current: 0 });
+  const [metrics, setMetrics] = useState({
+    voltage: 0,
+    current: 0,
+    power: 0
+  });
 
   useEffect(() => {
-    const metricsRef = ref(database, '/energy_data');
+    // Build a query: order by 'timestamp', take the last record only
+    const latestQuery = query(
+      ref(database, '/energy_data'),
+      orderByChild('timestamp'),
+      limitToLast(1)
+    );
 
-    const unsubscribe = onValue(metricsRef, (snapshot) => {
+    // Subscribe to the query
+    const unsubscribe = onValue(latestQuery, snapshot => {
       const data = snapshot.val();
-      if (!data) {
-        setMetrics({ power: 0, voltage: 0, current: 0 });
-        return;
+      if (data) {
+        // snapshot.val() is an object with a single key => extract it
+        const lastKey = Object.keys(data)[0];
+        setMetrics({
+          voltage: data[lastKey].voltage,
+          current: data[lastKey].current,
+          power: data[lastKey].power
+        });
       }
-
-      let totalPower = 0;
-      let totalVoltage = 0;
-      let totalCurrent = 0;
-
-      Object.values(data).forEach((entry) => {
-        totalPower += Number(entry.power) || 0;
-        totalVoltage += Number(entry.voltage) || 0;
-        totalCurrent += Number(entry.current) || 0;
-      });
-
-      setMetrics({
-        power: totalPower,
-        voltage: totalVoltage,
-        current: totalCurrent,
-      });
     });
 
+    // Cleanup listener on unmount
     return () => unsubscribe();
-  }, []);
+  }, []); // Empty deps → run once on mount
 
   return metrics;
 }

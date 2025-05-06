@@ -5,6 +5,32 @@
   text-align: center;
 }
 
+.app-header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.app-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fdfcf8;
+  margin: 0;
+}
+
+.app-title-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.app-subtitle {
+  font-size: 1rem;
+  color: #fdfcf8;
+  margin-top: 0.5rem;
+}
+
 body {
   background-color: #324643;
 }

@@ -4,43 +4,44 @@ import { database } from '../firebase';
 import {
   ref,
   query,
-  orderByKey,
+  orderByChild,
   limitToLast,
   get
 } from 'firebase/database';
 
-export default function useWeeklyMetrics(path) {
-  const [data, setData] = useState([]);
+export default function useWeeklyMetrics() {
+  const [metrics, setMetrics] = useState({
+    timestamps: [],
+    voltage: [],
+    current: [],
+    power: []
+  });
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const weekQuery = query(
-          ref(database, path),
-          orderByKey(),
-          limitToLast(7)
-        );
-        const snapshot = await get(weekQuery);
-        if (snapshot.exists()) {
-          const raw = snapshot.val();
-          const chartData = Object.entries(raw).map(([ts, vals]) => ({
-            date: new Date(+ts).toLocaleDateString(),
-            value: vals[path.split('/').pop()]
-          }));
-          setData(chartData);
-        } else {
-          setData([]);
-        }
-      } catch (err) {
-        console.error('Error fetching weekly metrics:', err);
-        setData([]);
-      }
-    }
+    const weekQuery = query(
+      ref(database, 'energy_data'),
+      orderByChild('timestamp'),
+      limitToLast(7)
+    );
 
-    if (path) {
-      fetchData();
-    }
-  }, [path]);
+    get(weekQuery).then(snapshot => {
+      if (!snapshot.exists()) return;
+      const raw = snapshot.val();
 
-  return data;
+      const entries = Object.values(raw)
+        .sort((a, b) => a.timestamp - b.timestamp);
+
+      const timestamps = entries.map(e =>
+        new Date(e.timestamp).toLocaleDateString()
+      );
+      const voltage = entries.map(e => e.voltage);
+      const current = entries.map(e => e.current);
+      const power   = entries.map(e => e.power);
+
+      setMetrics({ timestamps, voltage, current, power });
+    })
+    .catch(console.error);
+  }, []);
+
+  return metrics;
 }

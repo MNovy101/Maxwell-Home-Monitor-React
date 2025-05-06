@@ -1,45 +1,42 @@
 // src/components/GraphCard.jsx
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
-  LineChart, Line, XAxis, YAxis,
-  CartesianGrid, Tooltip, ResponsiveContainer
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
 } from 'recharts';
-import useWeeklyMetrics from '../hooks/useWeeklyMetrics';
-import styles from './KpiCard.module.css';
+import styles from './GraphCard.module.css';
 
-export default function GraphCard({ title, dataPath, color }) {
-  const chartData = useWeeklyMetrics(dataPath);
+export default function GraphCard({ metrics }) {
+  const { timestamps, voltage, current, power } = metrics;
+
+  // Combine into data points
+  const data = timestamps.map((date, i) => ({
+    date,
+    Voltage: voltage[i],
+    Current: current[i],
+    Power:   power[i]
+  }));
 
   return (
-    <div className={styles.card}>
-      <h3 className={styles.title}>{title}</h3>
-      <ResponsiveContainer width="100%" height={150}>
-        <LineChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+    <div className={styles.chartContainer}>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-          <YAxis tick={{ fontSize: 12 }} />
-          <Tooltip formatter={(val) => val.toFixed(2)} />
-          <Line 
-            type="monotone" 
-            dataKey="value" 
-            stroke={color} 
-            strokeWidth={2} 
-            dot={{ r: 3 }} 
-            activeDot={{ r: 5 }} 
-          />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend verticalAlign="top" height={36}/>
+          <Line type="monotone" dataKey="Voltage" stroke="#8884d8" />
+          <Line type="monotone" dataKey="Current" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="Power"   stroke="#ff7300" />
         </LineChart>
       </ResponsiveContainer>
     </div>
   );
 }
-
-GraphCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  dataPath: PropTypes.string.isRequired,
-  color: PropTypes.string
-};
-
-GraphCard.defaultProps = {
-  color: '#8884d8'
-};
