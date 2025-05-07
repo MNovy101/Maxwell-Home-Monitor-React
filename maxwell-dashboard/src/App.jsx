@@ -24,7 +24,7 @@ export default function App() {
       </header>
 
       <section className="section">
-      <h2 className="section-title">Weekly Measurements</h2>
+      <h2 className="section-title">Monthly Measurements</h2>
         <GraphCard metrics={weeklyMetrics} />
       </section>
 
