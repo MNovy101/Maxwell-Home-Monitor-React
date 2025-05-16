@@ -8,7 +8,7 @@ import MainIcon from './assets/icons/MainIcon.svg';
 import './App.css';
 
 export default function App() {
-  const { power, voltage, current } = useRealtimeMetrics();
+  const { current } = useRealtimeMetrics();
   const weeklyMetrics = useWeeklyMetrics('/energy_data');
 
   return (
@@ -30,7 +30,7 @@ export default function App() {
 
       <section className="section">
         <h2 className="section-title">Current Measurements</h2>
-        <KpiGrid metrics={{ power, voltage, current }} />
+        <KpiGrid metrics={{ current }} />
       </section>
     </div>
   );

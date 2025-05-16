@@ -13,14 +13,12 @@ import {
 import styles from './GraphCard.module.css';
 
 export default function GraphCard({ metrics }) {
-  const { timestamps, voltage, current, power } = metrics;
+  const { timestamps, current } = metrics;
 
   // Combine into data points
   const data = timestamps.map((date, i) => ({
     date,
-    Voltage: voltage[i],
-    Current: current[i],
-    Power:   power[i]
+    Current: current[i]
   }));
 
   return (
@@ -32,9 +30,7 @@ export default function GraphCard({ metrics }) {
           <YAxis />
           <Tooltip />
           <Legend verticalAlign="top" height={36}/>
-          <Line type="monotone" dataKey="Voltage" stroke="#8884d8" />
           <Line type="monotone" dataKey="Current" stroke="#82ca9d" />
-          <Line type="monotone" dataKey="Power"   stroke="#ff7300" />
         </LineChart>
       </ResponsiveContainer>
     </div>

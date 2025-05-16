@@ -12,9 +12,7 @@ import {
 export default function useWeeklyMetrics() {
   const [metrics, setMetrics] = useState({
     timestamps: [],
-    voltage: [],
-    current: [],
-    power: []
+    current: []
   });
 
   useEffect(() => {
@@ -34,11 +32,9 @@ export default function useWeeklyMetrics() {
       const timestamps = entries.map(e =>
         new Date(e.timestamp).toLocaleDateString()
       );
-      const voltage = entries.map(e => e.voltage);
       const current = entries.map(e => e.current);
-      const power   = entries.map(e => e.power);
 
-      setMetrics({ timestamps, voltage, current, power });
+      setMetrics({ timestamps, current });
     })
     .catch(console.error);
   }, []);
