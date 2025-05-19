@@ -4,11 +4,13 @@ import KpiGrid from './components/KpiGrid';
 import GraphCard from './components/GraphCard';
 import useRealtimeMetrics from './hooks/useRealtimeMetrics';
 import useWeeklyMetrics from './hooks/useWeeklyMetrics';
+import useCumalativeMetrics from './hooks/useCumalativeMetrics';
 import MainIcon from './assets/icons/MainIcon.svg';
 import './App.css';
 
 export default function App() {
-  const { current } = useRealtimeMetrics();
+  const { power, voltage, current } = useRealtimeMetrics();
+  const AllMetrics = useCumalativeMetrics('/energy_data');
   const weeklyMetrics = useWeeklyMetrics('/energy_data');
 
   return (
@@ -24,13 +26,18 @@ export default function App() {
       </header>
 
       <section className="section">
-      <h2 className="section-title">Monthly Measurements</h2>
+      <h2 className="section-title">Previous Week</h2>
         <GraphCard metrics={weeklyMetrics} />
       </section>
 
       <section className="section">
-        <h2 className="section-title">Current Measurements</h2>
-        <KpiGrid metrics={{ current }} />
+      <h2 className="section-title">Last Measurements</h2>
+        <KpiGrid metrics={{ voltage, current, power }} />
+      </section>
+            
+      <section className="section">
+      <h2 className="section-title">All Measurements</h2>
+        <GraphCard metrics={AllMetrics} />
       </section>
     </div>
   );

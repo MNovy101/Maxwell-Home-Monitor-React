@@ -5,38 +5,50 @@ import {
   ref,
   query,
   orderByChild,
-  limitToLast,
+  startAt,
   get
 } from 'firebase/database';
 
 export default function useWeeklyMetrics() {
   const [metrics, setMetrics] = useState({
     timestamps: [],
-    current: []
+    voltage: [],
+    current: [],
+    power: []
   });
 
   useEffect(() => {
-    const weekQuery = query(
+    const now = Date.now();
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+
+    const weeklyQuery = query(
       ref(database, 'energy_data'),
       orderByChild('timestamp'),
-      limitToLast(7)
+      startAt(sevenDaysAgo)
     );
 
-    get(weekQuery).then(snapshot => {
-      if (!snapshot.exists()) return;
-      const raw = snapshot.val();
+    get(weeklyQuery)
+      .then(snapshot => {
+        if (!snapshot.exists()) {
+          setMetrics({ timestamps: [], voltage: [], current: [], power: [] });
+          return;
+        }
+        const entries = Object.values(snapshot.val())
+          .filter(e => e.timestamp >= sevenDaysAgo)
+          .sort((a, b) => a.timestamp - b.timestamp);
 
-      const entries = Object.values(raw)
-        .sort((a, b) => a.timestamp - b.timestamp);
-
-      const timestamps = entries.map(e =>
-        new Date(e.timestamp).toLocaleDateString()
-      );
-      const current = entries.map(e => e.current);
-
-      setMetrics({ timestamps, current });
-    })
-    .catch(console.error);
+        setMetrics({
+          timestamps: entries.map(e =>
+            new Date(e.timestamp).toLocaleDateString()
+          ),
+          voltage: entries.map(e => e.voltage),
+          current: entries.map(e => e.current),
+          power: entries.map(e => e.power)
+        });
+      })
+      .catch(err => {
+        console.error('Error fetching weekly metrics:', err);
+      });
   }, []);
 
   return metrics;

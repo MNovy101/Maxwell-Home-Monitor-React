@@ -4,25 +4,32 @@ import { database } from '../firebase';
 import { ref, onValue } from 'firebase/database';
 
 export default function useRealtimeMetrics() {
-  const [metrics, setMetrics] = useState({ current: 0 });
+  const [metrics, setMetrics] = useState({
+    timestamps: [],
+    voltage: [],
+    current: [],
+    power: []
+  });
 
   useEffect(() => {
     const metricsRef = ref(database, '/energy_data');
 
     const unsubscribe = onValue(metricsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
-        setMetrics({ current: 0 });
-        return;
-      }
+     const raw = snapshot.val();
 
-      let totalCurrent = 0;
+      const entries = Object.values(raw)
+        .sort((a, b) => a.timestamp - b.timestamp);
 
-      Object.values(data).forEach((entry) => {
-        totalCurrent += Number(entry.current) || 0;
-      });
+      const timestamps = entries.map(e =>
+        new Date(e.timestamp).toLocaleDateString()
+      );
+      const voltage = entries.map(e => e.voltage);
+      const current = entries.map(e => e.current);
+      const power   = entries.map(e => e.power);
 
-      setMetrics({ current: totalCurrent });
+      setMetrics({ timestamps, voltage, current, power });
+
+      setMetrics({ timestamps, voltage, current, power });
     });
 
     return () => unsubscribe();
