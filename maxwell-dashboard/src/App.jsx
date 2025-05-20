@@ -1,9 +1,10 @@
 // src/App.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MainIcon from './assets/icons/MainIcon.svg';
 import './App.css';
 import GraphView from './components/GraphView';
 import OverThresholdList from './components/OverThresholdList';
+
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('graphs');

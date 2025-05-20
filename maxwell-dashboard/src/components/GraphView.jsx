@@ -1,5 +1,5 @@
 // src/components/GraphView.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ref, onValue, onChildAdded } from 'firebase/database';
 import { database } from '../firebase';
 import KpiGrid from './KpiGrid';
@@ -50,7 +50,7 @@ export default function GraphView() {
       </section>
 
       <section className="section">
-        <h2 className="section-title">Last Measurements</h2>
+        <h2 className="section-title">Latest Measurements</h2>
         <KpiGrid metrics={{ voltage, current, power }} />
       </section>
     </div>

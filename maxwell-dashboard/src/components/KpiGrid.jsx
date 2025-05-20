@@ -4,7 +4,6 @@ import KpiCard from './KpiCard';
 import useRealtimeMetrics from '../hooks/useRealtimeMetrics';
 import CurrentIcon from '../assets/icons/current.svg';
 import PowerIcon from '../assets/icons/power.svg';
-import VoltageIcon from '../assets/icons/voltage.svg';
 import styles from './KpiGrid.module.css';
 
 export default function Dashboard() {
@@ -23,12 +22,6 @@ export default function Dashboard() {
         value={power.toFixed(2)}
         unit="W"
         icon={<PowerIcon />}
-      />
-      <KpiCard
-        title="Voltage"
-        value={voltage.toFixed(2)}
-        unit="V"
-        icon={<VoltageIcon />}
       />
     </div>
   );
