@@ -9,12 +9,15 @@ import {
 } from 'firebase/database';
 import { database } from '../firebase';
 import './OverThresholdList.css';
+import GraphCard from './GraphCard';
+import UseCumalativeMetrics from '../hooks/UseCumalativeMetrics';
 
 const THRESHOLD = 5.0;
 
 export default function OverThresholdList() {
   const [readings, setReadings] = useState([]);
   const [error, setError] = useState(null);
+  const allMetrics = UseCumalativeMetrics('/energy_data');
 
   useEffect(() => {
     const readingsRef = ref(database, 'readings/current');
@@ -55,6 +58,11 @@ export default function OverThresholdList() {
 
   return (
     <div className="over-threshold-container">
+      <section className="graph-section">
+         <h2 className="section-title">Previous Week</h2>
+        <GraphCard metrics={allMetrics} />
+      </section>
+     
       <h2>Readings Above {THRESHOLD}</h2>
 
       {readings.length === 0 ? (
