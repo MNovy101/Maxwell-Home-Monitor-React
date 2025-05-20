@@ -14,7 +14,6 @@ import styles from './GraphCard.module.css';
 
 export default function GraphCard({ metrics }) {
   const { timestamps, voltage, current, power } = metrics;
-
   const data = timestamps.map((date, i) => ({
     date,
     Voltage: voltage[i],
