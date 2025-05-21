@@ -1,5 +1,4 @@
 // src/components/KpiCard.jsx
-import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './KpiCard.module.css';
 

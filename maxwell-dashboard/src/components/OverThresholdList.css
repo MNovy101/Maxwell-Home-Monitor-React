@@ -15,6 +15,48 @@
   padding: 1rem;
   box-sizing: border-box;
 }
+.threshold-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.threshold-table th,
+.threshold-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.threshold-table th {
+  background-color: #f5f5f5;
+}
+
+.threshold-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.error {
+  color: #c00;
+  margin-bottom: 1rem;
+}
+
+.graph-view-container {
+  top: sticky;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background-color: #324643;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fdfcf8;
+  padding: 1rem;
+  box-sizing: border-box;
+  order: 0;
+}
 
 .over-threshold-container h2 {
   margin-bottom: 0.75rem;
@@ -53,7 +95,6 @@
   color: #555;
 }
 
-
 .section {
   margin-bottom: 2rem;
 }
@@ -61,4 +102,28 @@
 .section-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #555555;
+  text-transform: uppercase;
+}
+
+.readings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.readings-table th,
+.readings-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.readings-table th {
+  background: #f0f0f0;
 }

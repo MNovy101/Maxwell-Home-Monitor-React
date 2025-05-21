@@ -1,5 +1,4 @@
 // src/components/GraphCard.jsx
-import React from 'react';
 import {
   ResponsiveContainer,
   LineChart,
@@ -30,9 +29,7 @@ export default function GraphCard({ metrics }) {
           <YAxis />
           <Tooltip />
           <Legend verticalAlign="top" height={36}/>
-          <Line type="monotone" dataKey="Voltage" stroke="#8884d8" />
           <Line type="monotone" dataKey="Current" stroke="#82ca9d" />
-          <Line type="monotone" dataKey="Power"   stroke="#ff7300" />
         </LineChart>
       </ResponsiveContainer>
     </div>
