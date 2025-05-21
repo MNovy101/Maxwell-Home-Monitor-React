@@ -25,7 +25,11 @@ export default function GraphCard({ metrics }) {
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
+          <XAxis
+            dataKey="date"
+            type="category"
+            tick={{ fontSize: 14 }}
+          />
           <YAxis />
           <Tooltip />
           <Legend verticalAlign="top" height={36}/>
