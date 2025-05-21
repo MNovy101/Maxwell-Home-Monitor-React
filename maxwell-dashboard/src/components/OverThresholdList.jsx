@@ -1,42 +1,36 @@
 // src/components/OverThresholdList.jsx
-import React, { useState, useEffect } from 'react';
-import {
-  ref,
-  onValue,
-  query,
-  orderByChild,
-  startAt
-} from 'firebase/database';
+import { useState, useEffect } from 'react';
+import { ref, onValue, query, orderByChild, startAt } from 'firebase/database';
 import { database } from '../firebase';
-import './OverThresholdList.css';
 import GraphCard from './GraphCard';
-import UseCumalativeMetrics from '../hooks/UseCumalativeMetrics';
+import useCumalativeMetrics from '../hooks/useCumalativeMetrics';
+import './GraphView.module.css';
 
-const THRESHOLD = 5.0;
-
-export default function OverThresholdList() {
+export default function GraphView() {
   const [readings, setReadings] = useState([]);
   const [error, setError] = useState(null);
-  const allMetrics = UseCumalativeMetrics('/energy_data');
+  const allMetrics = useCumalativeMetrics('/energy_data');
+  const dataRef = ref(database, 'energy_data');
+  const dataQuery = query(
+    dataRef,
+    orderByChild('current'),
+    startAt(7.5)
+  );
+  const THRESHOLD = 7.5;  // Will need to update when more data is obtained to get an idea of what we want to set it at
+
 
   useEffect(() => {
-    const readingsRef = ref(database, 'readings/current');
-    const overThresholdQuery = query(
-      readingsRef,
-      orderByChild('value'),
-      startAt(THRESHOLD)
-    );
-
     const unsubscribe = onValue(
-      overThresholdQuery,
+      dataQuery,
       snapshot => {
-        const data = snapshot.val() || {};
-        const list = Object.entries(data).map(([id, entry]) => ({
-          id,
-          value: entry.value,
-          timestamp: entry.timestamp
-        }));
-        list.sort((a, b) => b.timestamp - a.timestamp);
+        const raw = snapshot.val() || {};
+        const list = Object.entries(raw).map(([key, entry]) => ({
+          timestamp: entry.timestamp,
+          id: key,
+          voltage:   entry.voltage,
+          current:   entry.current,
+          power:     entry.power
+        })).filter(r => r.current >= THRESHOLD).sort((a, b) => a.timestamp - b.timestamp);
         setReadings(list);
       },
       err => {
@@ -48,39 +42,39 @@ export default function OverThresholdList() {
     return () => unsubscribe();
   }, []);
 
-  if (error) {
-    return (
-      <div className="over-threshold-container">
-        <p className="error">{error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="over-threshold-container">
-      <section className="graph-section">
-         <h2 className="section-title">Previous Week</h2>
+    <div className="graph-view-container">
+      <section className="section">
+        <h2 className="section-title">All Measurements</h2>
         <GraphCard metrics={allMetrics} />
       </section>
-     
-      <h2>Readings Above {THRESHOLD}</h2>
 
-      {readings.length === 0 ? (
-        <p className="no-readings">No readings exceed the threshold.</p>
-      ) : (
-        <ul className="readings-list">
-          {readings.map(({ id, value, timestamp }) => (
-            <li key={id} className="reading-item">
-              <span className="reading-value">
-                {value.toFixed(2)}
-              </span>
-              <span className="reading-time">
-                {new Date(timestamp).toLocaleString()}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+      <section className="section">
+        <h2 className="section-title">High Readings</h2>
+        {error && <p className="error">{error}</p>}
+        {readings.length === 0 ? (
+          <p className="no-readings">No data available.</p>
+        ) : (
+          <table className="readings-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Current</th>
+                <th>Power</th>
+              </tr>
+            </thead>
+            <tbody>
+              {readings.map(({ timestamp, id, current, power }) => (
+                <tr key={`${timestamp}-${id}`}>
+                  <td>{new Date(timestamp).toLocaleString()}</td>
+                  <td>{current.toFixed(2)}</td>
+                  <td>{power.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
     </div>
   );
 }

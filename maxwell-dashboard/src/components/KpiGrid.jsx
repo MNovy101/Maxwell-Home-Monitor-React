@@ -1,5 +1,4 @@
 // src/components/KpiGrid.jsx
-import React from 'react';
 import KpiCard from './KpiCard';
 import useRealtimeMetrics from '../hooks/useRealtimeMetrics';
 import CurrentIcon from '../assets/icons/current.svg';
@@ -7,7 +6,7 @@ import PowerIcon from '../assets/icons/power.svg';
 import styles from './KpiGrid.module.css';
 
 export default function Dashboard() {
-  const { power, voltage, current } = useRealtimeMetrics();
+  const { power, current } = useRealtimeMetrics();
 
   return (
     <div className={styles.grid}>
