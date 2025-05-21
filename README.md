@@ -1,95 +1,77 @@
 # Maxwell Home Monitor React
 
-A React + Vite web dashboard for the Maxwell Home Energy Monitor system. Visualize live and historical energy usage data streamed from Firebase Realtime Database.
+A lightning-fast, responsive web dashboard built with **React** and **Vite** for visualizing real-time and historical home energy data. It connects to a **Firebase Realtime Database**, streaming voltage, current, and power readings from an ESP32-based sensor node.
 
 ---
 
-## Table of Contents
+## 🚀 Features
 
-1. Features
-2. Prerequisites
-3. Installation
-4. Configuration
-5. Running Locally
-6. Building for Production
-7. Testing
-8. Project Structure
-9. Contributing
-10. License
+- **Live Charts**: Real-time line graphs for voltage, current, and power  
+- **Weekly Trends**: Seven-day historical view, dynamically filtered in the `useWeeklyMetrics` hook  
+- **Over-Threshold Alerts**: Table of readings where current exceeds a configurable threshold (default 7.5 A) via `OverThresholdList.jsx`  
+- **Accessible Tabs**: ARIA-compliant `<Tabs>` component for switching between “Recent Data” and “Alerts”  
+- **Modular Hooks**: `useRealtimeMetrics`, `useWeeklyMetrics`, and `useCumulativeMetrics` encapsulate data fetching and filtering logic  
+- **Secure & Indexed**: Firebase rules with `.indexOn` for `timestamp` and `current` enable server-side filtering and performant queries  
 
 ---
 
-## Features
+## 📋 Table of Contents
 
-* Live Charts: Real-time voltage, current, and power graphs
-* Usage History: Daily, weekly, and monthly trends
-* Alert Panel: High-usage alerts streamed from Firebase
-* Responsive Layout: Mobile and desktop ready
-* Secure Access: Firebase rules ensure users see only their data
+1. [Prerequisites](#-prerequisites)  
+2. [Installation](#-installation)  
+3. [Configuration](#-configuration)  
+4. [Running Locally](#-running-locally)
+5. [Project Structure](#-project-structure)  
+6. [Key Components & Hooks](#-key-components--hooks)
+   
+---
+
+## 🔧 Prerequisites
+
+- **Node.js** v16+ (includes npm)  
+- **Vite** (bundled via devDependencies)  
+- Access to the **Firebase** project with Realtime Database enabled  
+  - Data under `/energy_data/{timestamp}` in format `{ voltage, current, power }`  
+  - Security rules indexed on `timestamp` and `current`  
 
 ---
 
-## Prerequisites
-
-* Node.js v16 or later (includes npm)
-* Vite (installed via `npm install`)
-* A Firebase project with Realtime Database enabled and security rules deployed
-* Data being written to the `/energy_data` and `/alerts` paths in your Firebase Realtime Database
-
----
-
-## Installation
-
-1. Clone the repository
+## ⚙️ Installation
 
 ```bash
+# 1. Clone
 git clone https://github.com/MNovy101/Maxwell-Home-Monitor-React.git
 cd Maxwell-Home-Monitor-React
-```
 
-2. Install dependencies
-
-```bash
+# 2. Install dependencies
 npm install
-```
+````
 
 ---
 
-## Configuration
+## 🛠 Configuration
 
-1. Copy the example environment file and rename it:
+1. Copy and rename the example environment file:
 
-```bash
-cp .env.example .env.local
-```
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Populate `.env.local` with your Firebase credentials:
 
-2. Open `.env.local` in your text editor and replace its contents with:
-
-```
-VITE_FIREBASE_API_KEY=<YOUR_API_KEY>
-VITE_FIREBASE_AUTH_DOMAIN=maxwell-home-power-monitor.firebaseapp.com
-VITE_FIREBASE_DATABASE_URL=https://maxwell-home-power-monitor-default-rtdb.firebaseio.com
-VITE_FIREBASE_PROJECT_ID=maxwell-home-power-monitor
-VITE_FIREBASE_STORAGE_BUCKET=maxwell-home-power-monitor.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=989558132534
-VITE_FIREBASE_APP_ID=1:989558132534:web:003e302bb56aebee436d97
-VITE_FIREBASE_MEASUREMENT_ID=G-M2ZP078KJE
-```
-
-> **Important:**
->
-> * Never commit `.env.local` (contains secrets).
-> * Ensure `.env.local` is listed in `.gitignore`.
-
-3. If you need to adjust database rules, edit `database.rules.json` and then deploy:
-
-```bash
-firebase deploy --only database
-```
+   ```ini
+   VITE_FIREBASE_API_KEY=...
+   VITE_FIREBASE_AUTH_DOMAIN=...
+   VITE_FIREBASE_DATABASE_URL=...
+   VITE_FIREBASE_PROJECT_ID=...
+   VITE_FIREBASE_STORAGE_BUCKET=...
+   VITE_FIREBASE_MESSAGING_SENDER_ID=...
+   VITE_FIREBASE_APP_ID=...
+   ```
+3. Ensure `.env.local` is git-ignored to keep secrets safe.
 
 ---
 
-## Running Locally
+## ▶️ Running Locally
 
 Start the development server:
 
@@ -97,77 +79,60 @@ Start the development server:
 npm run dev
 ```
 
-Open in your browser to view the dashboard.
+Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## Building for Production
-
-1. Build optimized assets:
-
-```bash
-npm run build
-```
-
-2. Preview the production build locally:
-
-```bash
-npm run serve
-```
-
----
-
-## Testing
-
-This project uses Vitest for unit/component tests and @firebase/rules-unit-testing for security-rules validation.
-
-* Run unit tests:
-
-```bash
-npm test
-```
-
-* Run Realtime Database rules tests (launches emulator automatically):
-
-```bash
-npm run test:rtdb
-```
-
----
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 Maxwell-Home-Monitor-React/
-├── public/                  # Static assets (index.html)
-├── src/                     # Source code
-│   ├── App.jsx              # Main React component
-│   ├── firebase.js          # Firebase initialization
-│   ├── components/          # Reusable UI components
-│   ├── hooks/               # Custom React hooks
-│   └── main.jsx             # App entry point
-├── tests/                   # Test suites
-│   ├── App.test.jsx         # Vitest component tests
-│   └── security.rules.test.spec.jsx  # Security rules tests
-├── .env.example             # Environment variables example
-├── database.rules.json      # Firebase Realtime Database rules
-├── package.json             # NPM dependencies & scripts
-├── vite.config.js           # Vite configuration
-└── README.md                # Project documentation
+├─ public/                         # static assets (index.html)
+├─ src/
+│  ├─ assets/                      # icons, images
+│  ├─ components/
+│  │  ├─ GraphView.jsx             # historical & live charts
+│  │  ├─ OverThresholdList.jsx     # high-current alerts table
+│  │  ├─ Tabs.jsx                  # tab container
+│  │  └─ GraphCard.jsx             # reusable chart wrapper
+│  ├─ hooks/
+│  │  ├─ useRealtimeMetrics.js     # live data listener
+│  │  ├─ useWeeklyMetrics.js       # 7-day filter hook
+│  │  └─ useCumulativeMetrics.js   # full-range data hook
+│  ├─ firebase.js                  # Firebase init
+│  ├─ App.jsx                      # main layout and tabs
+│  └─ main.jsx                     # entry point
+├─ tests/                          # Vitest & RTDB rules tests TBD
+├─ .env.example                    # example environment variables
+├─ database.rules.json             # Firebase Realtime Database rules
+├─ package.json                    # scripts & dependencies
+├─ vite.config.js                  # Vite configuration
+└─ README.md                       # this page =)
 ```
 
 ---
 
-## Contributing
+## 🧩 Key Components & Hooks
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/xyz`).
-3. Make your changes and add tests.
-4. Commit with clear messages.
-5. Push and open a pull request.
+### `App.jsx`
+
+Sets up the **sticky header**, **Tabs**, and placeholder sections for live charts, weekly trends, and alerts.
+
+### `GraphView.jsx`
+
+* Fetches all `/energy_data` entries via `orderByKey()`
+* Parses and sorts by `entry.timestamp`
+* Renders a historical `<table>` and a `<GraphCard>` chart for weekly metrics
+
+### `OverThresholdList.jsx`
+
+* Queries `/energy_data` with `orderByChild('current')` & `startAt(threshold)`
+* Filters and displays readings exceeding the threshold in a semantic table
+
+### Hooks
+
+* **`useRealtimeMetrics`**: continuous listener for latest `voltage`, `current`, `power`
+* **`useWeeklyMetrics`**: filters data within the past 7 days
+* **`useCumulativeMetrics`**: retrieves full-range historical data
 
 ---
-
-## License
-
-This project is licensed under the MIT License. See `LICENSE` for details.
