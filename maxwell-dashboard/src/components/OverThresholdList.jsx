@@ -30,7 +30,7 @@ export default function GraphView() {
           voltage:   entry.voltage,
           current:   entry.current,
           power:     entry.power
-        })).filter(r => r.current >= THRESHOLD).sort((a, b) => a.timestamp - b.timestamp);
+        })).filter(r => r.current >= THRESHOLD).sort((b, a) => a.timestamp - b.timestamp);
         setReadings(list);
       },
       err => {
