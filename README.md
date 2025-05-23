@@ -4,7 +4,7 @@ A lightning-fast, responsive web dashboard built with **React** and **Vite** for
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
 - **Live Charts**: Real-time line graphs for voltage, current, and power  
 - **Weekly Trends**: Seven-day historical view, dynamically filtered in the `useWeeklyMetrics` hook  
@@ -20,10 +20,11 @@ A lightning-fast, responsive web dashboard built with **React** and **Vite** for
 1. [Prerequisites](#-prerequisites)  
 2. [Installation](#-installation)  
 3. [Configuration](#-configuration)  
-4. [Running Locally](#-running-locally)
+4. [Running Locally](#-running-locally)  
 5. [Project Structure](#-project-structure)  
-6. [Key Components & Hooks](#-key-components--hooks)
-   
+6. [Key Components & Hooks](#-key-components--hooks)  
+7. [Running Tests](#-running-tests)
+
 ---
 
 ## 🔧 Prerequisites
@@ -45,11 +46,11 @@ cd Maxwell-Home-Monitor-React
 
 # 2. Install dependencies
 npm install
-````
+```
 
 ---
 
-## 🛠 Configuration
+## 🛠️ Configuration
 
 1. Copy and rename the example environment file:
 
@@ -102,7 +103,7 @@ Maxwell-Home-Monitor-React/
 │  ├─ firebase.js                  # Firebase init
 │  ├─ App.jsx                      # main layout and tabs
 │  └─ main.jsx                     # entry point
-├─ tests/                          # Vitest & RTDB rules tests TBD
+├─ tests/                          # Unit test files
 ├─ .env.example                    # example environment variables
 ├─ database.rules.json             # Firebase Realtime Database rules
 ├─ package.json                    # scripts & dependencies
@@ -112,27 +113,33 @@ Maxwell-Home-Monitor-React/
 
 ---
 
-## 🧩 Key Components & Hooks
+## 🧰 Key Components & Hooks
 
 ### `App.jsx`
-
 Sets up the **sticky header**, **Tabs**, and placeholder sections for live charts, weekly trends, and alerts.
 
 ### `GraphView.jsx`
-
 * Fetches all `/energy_data` entries via `orderByKey()`
 * Parses and sorts by `entry.timestamp`
 * Renders a historical `<table>` and a `<GraphCard>` chart for weekly metrics
 
 ### `OverThresholdList.jsx`
-
 * Queries `/energy_data` with `orderByChild('current')` & `startAt(threshold)`
 * Filters and displays readings exceeding the threshold in a semantic table
 
 ### Hooks
-
 * **`useRealtimeMetrics`**: continuous listener for latest `voltage`, `current`, `power`
 * **`useWeeklyMetrics`**: filters data within the past 7 days
 * **`useCumulativeMetrics`**: retrieves full-range historical data
 
 ---
+
+## ✅ Running Tests
+
+We use **Jest** and **React Testing Library** to verify components render correctly.
+
+### To run unit tests:
+
+```bash
+npm run test
+```
