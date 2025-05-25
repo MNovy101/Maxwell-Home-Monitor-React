@@ -16,7 +16,7 @@ export default function GraphView() {
     orderByChild('current'),
     startAt(7.5)
   );
-  const THRESHOLD = 7.5;  // Will need to update when more data is obtained to get an idea of what we want to set it at
+  const THRESHOLD = 14.25;  // Will need to update when more data is obtained to get an idea of what we want to set it at
 
 
   useEffect(() => {
