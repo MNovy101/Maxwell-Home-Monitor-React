@@ -33,7 +33,7 @@ export default function GraphCard({ metrics }) {
           <YAxis />
           <Tooltip />
           <Legend verticalAlign="top" height={36}/>
-          <Line type="monotone" dataKey="Current" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="Current" stroke="#b1ccbb" dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
